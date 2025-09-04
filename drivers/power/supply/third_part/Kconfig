@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-2.0-only
+menuconfig THIRD_PART_POWER_SUPPLY
+	bool "Support for Third Part Inc. power supply"
+	depends on ARCH_QCOM
+
+if THIRD_PART_POWER_SUPPLY
+
+source "drivers/power/supply/third_part/sm5602/Kconfig"
+
+source "drivers/power/supply/third_part/charger_manager/Kconfig"
+
+endif

@@ -1,0 +1,21 @@
+[abi_symbol_list]
+
+# required by chinoe-charger-manager.ko
+# cpu_idle_poll_ctrl
+alarm_try_to_cancel
+alarm_start
+kernel_power_off
+
+# required by sm5602_fg.ko
+i2c_smbus_write_word_data
+i2c_smbus_read_word_data
+i2c_smbus_read_byte_data
+i2c_smbus_write_byte_data
+
+# required by rt1711h.ko
+# cpu_idle_poll_ctrl
+
+# required by rt-pd-manager.ko
+typec_partner_set_identity
+device_set_of_node_from_dev
+

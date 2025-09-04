@@ -1,0 +1,27 @@
+config CHINOE_CHARGER
+	tristate "Chino-e Charging Driver"
+	depends on THIRD_PART_POWER_SUPPLY
+	help
+	  Say yes here to enable chino-e charging driver.
+	  This driver contains charging control flow and
+	  maintains charging status.
+	  Say no if not using chino-e charging driver.
+
+config CHINOE_MAIN_CHARGER
+	tristate "Charger Driver for Chinoe Main Charger IC"
+	depends on CHINOE_CHARGER
+	help
+	  Say Y to enable
+	  Chinoe Main Charger driver.
+	  It depends on
+	  the config CHINOE_CHARGER.
+
+config CHINOE_SLAVE_CHARGER
+	tristate "Charger Driver for Chinoe Slave Charger IC"
+	depends on CHINOE_CHARGER
+	help
+	  Say Y to enable
+	  Chinoe Slave Charger driver.
+	  It depends on
+	  the config CHINOE_CHARGER.
+

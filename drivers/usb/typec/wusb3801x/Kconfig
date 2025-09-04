@@ -1,0 +1,8 @@
+config TCPC_WUSB3801X
+	tristate "WillSemi WUSB3801X TypeC port Controller Driver"
+	default n
+	help
+	  Say Y to enable
+	  WillSemi WUSB3801X
+	  TypeC port Controller
+	  Driver

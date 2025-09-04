@@ -1,0 +1,12 @@
+#
+# TypeC Port Controller Device Configuration
+#
+
+config SUPPORT_FUEL_GAUGE_SM5602
+	tristate "Support Fuel Gauge SM5602"
+	depends on THIRD_PART_POWER_SUPPLY
+	default n
+	help
+	  Say Y to enable
+	  Fuel Gauge
+	  SM5602 Device Driver

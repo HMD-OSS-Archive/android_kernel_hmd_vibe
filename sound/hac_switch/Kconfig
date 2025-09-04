@@ -1,0 +1,5 @@
+config HAC_SWITCH
+	tristate "Soc Audio for awinic aw882xxseries"
+	depends on I2C
+	help
+	  This option enables support for aw882xxseries Smart PA.

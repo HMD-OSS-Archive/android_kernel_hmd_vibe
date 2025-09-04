@@ -1,0 +1,8 @@
+config TCPC_SGM7220
+	tristate "SGMicro SGM7220 TypeC port Controller Driver"
+	default n
+	help
+	  Say Y to enable
+	  SGMicro SGM7220
+	  TypeC port Controller
+	  Driver
