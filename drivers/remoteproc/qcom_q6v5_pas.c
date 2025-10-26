@@ -1033,6 +1033,26 @@ static int setup_mpss_dsm_mem(struct platform_device *pdev)
 	return 0;
 }
 
+// add-begin ning.wei@hmd++ for add modem restart sys node
+struct rproc *g_mpss_rproc = NULL;
+static ssize_t restart_modem_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf) {
+    return snprintf(buf, PAGE_SIZE, "restart modem by write 1 \n");
+}
+
+static ssize_t restart_modem_store(struct kobject *kobj, struct kobj_attribute *attr, const char *buf, size_t count) {
+
+
+    if (g_mpss_rproc) {
+	pr_err("restart_modem: modem shutdown and then boot !");
+	rproc_shutdown(g_mpss_rproc);
+	rproc_boot(g_mpss_rproc);
+    }
+    return count;
+}
+
+static struct kobj_attribute restart_modem_attribute = __ATTR(restart_modem, 0644, restart_modem_show, restart_modem_store);
+// add-end ning.wei@hmd++ for add modem restart sys node
+
 static int adsp_probe(struct platform_device *pdev)
 {
 	const struct adsp_data *desc;
@@ -1182,6 +1202,16 @@ static int adsp_probe(struct platform_device *pdev)
 	ret = rproc_add(rproc);
 	if (ret)
 		goto destroy_minidump_dev;
+
+	// add-begin ning.wei@hmd++ for add modem restart sys node
+	if (!strcmp(fw_name, "modem.mdt")) {
+		if (sysfs_create_file(kernel_kobj, &restart_modem_attribute.attr) < 0) {
+			pr_err("Failed to create restart_modem_kobj sysfs \n");
+			return -ENOMEM;
+	    	}
+		g_mpss_rproc = rproc;
+	}
+	// add-end ning.wei@hmd++ for add modem restart sys node
 
 	return 0;
 
