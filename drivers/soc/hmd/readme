@@ -1,0 +1,4 @@
+### This directory is used to store HMD custom kernel code.
+### The added kernel directory is linked to the /vendor/kernel_platform/msm-kernel/drivers/soc/hmd directory.
+### Add it to the /vendor/kernel_platform/msm-kernel/drivers/soc/Makefile directory
+### obj-$(CONFIG_HMD_XXX) += HMD/XXX/

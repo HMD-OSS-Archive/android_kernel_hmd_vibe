@@ -1,0 +1,80 @@
+/*
+ * Copyright (C) 2018 CNCE Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See http://www.gnu.org/licenses/gpl-2.0.html for more details.
+ */
+
+#include <dt-bindings/iio/qti_power_supply_iio.h>
+
+&tlmm {
+	et-charge {
+		typec_irq_pin: typec_irq_pin {
+			mux {
+				pins = "gpio107";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio107";
+				bias-disable; /* No PULL */
+				drive-strength = <2>;
+			};
+		};
+	};
+};
+
+/*SHK-6108 20231020 huyao add begin*/ 
+&usb_qmp_dp_phy{
+	vdd-supply = <&L4A>;
+};
+/*SHK-6108 20231020 huyao add end*/ 
+
+&qupv3_se2_i2c {
+	sgm7220: sgm7220@47 {
+		compatible = "sgm,sgm7220";
+		reg = <0x47>;
+		status = "okay";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&typec_irq_pin>;
+		sgm7220,irq_gpio = <&tlmm 107 0x0>;
+		/* sgm7220,en_cc_gpio */
+		/* sgm7220,vreg_5v_gpio */
+	};
+
+	wusb3801x: wusb3801x@60 {
+		compatible = "mediatek,wusb3801x";
+		reg = <0x60>;
+		status = "disabled";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&typec_irq_pin>;
+		wusb3801,irq-gpio = <&tlmm 107 0x0>;
+		wusb3801,init-mode = <0x24>;
+		wusb3801,host-current = <0x01>;
+		wusb3801,drp-toggle-time = <40>;
+	};
+};
+
+&usb0 {
+       extcon = <&chinoe_charger>, <&eud>;
+
+       #io-channel-cells = <1>;
+       io-channels= <&charger PSY_IIO_USB_REAL_TYPE>;
+       io-channel-names = "chg_type";
+};
+
+&usb2_phy0 {
+	qcom,param-override-seq =
+		<0xa6 0x6c>,  /* override_x0 */
+		<0x88 0x70>,  /* override_x1 */
+		<0x16 0x74>;  /* override_x2 */
+};
+

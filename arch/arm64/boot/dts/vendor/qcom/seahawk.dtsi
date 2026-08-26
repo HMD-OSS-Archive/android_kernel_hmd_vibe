@@ -1,0 +1,107 @@
+&qupv3_se0_spi {
+	status = "ok";
+	#address-cells = <1>;
+	#size-cells = <0>;
+	omnivision@0 {
+		compatible = "omnivision,tcm-spi";
+		reg = <0>;
+		spi-max-frequency = <8000000>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <80 0x02>;
+
+		pinctrl-names = "pmx_ts_active","pmx_ts_suspend","pmx_ts_release";
+		pinctrl-0 = <&ts_int_active &ts_reset_active>;
+		pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
+		pinctrl-2 = <&ts_release>;
+	
+		omnivision,x-flip = <720>;
+		omnivision,y-flip = <1612>;
+		omnivision,bus-reg-name = "vdd";
+		omnivision,pwr-reg-name = "avdd";
+		omnivision,irq-gpio = <&tlmm 80 0x02>;
+		omnivision,irq-on-state = <0>;
+		omnivision,tpio-reset-gpio = <&tlmm 86 0x01>;
+		omnivision,reset-on-state = <0>;
+		omnivision,reset-active-ms = <20>;
+		omnivision,reset-delay-ms = <200>;
+		omnivision,power-delay-ms = <200>;
+		omnivision,spi-mode = <3>;
+		omnivision,byte-delay-us = <0>;
+		omnivision,block-delay-us = <0>;
+		omnivision,ubl-max-freq = <3000000>;
+		omnivision,ubl-byte-delay-us = <20>;
+
+		chipone,rst-gpio = <&tlmm 86 0x01>;
+		chipone,irq-gpio = <&tlmm 80 0x02>;
+		chipone,cs-gpio = <&tlmm 3 0>;
+		chipone,x-res = <720>;
+		chipone,y-res = <1612>;
+
+		chipone,touch-charger-detect-enable;
+		chipone,touch-charger-detect-type = "poll"; /* notify, poll */
+		chipone,touch-charger-detect-psy-name = "usb";
+		chipone,touch-charger-detect-psp = "POWER_SUPPLY_PROP_ONLINE";
+		chipone,touch-charger-detect-psp-poll-interval = <1000>;
+
+
+		chipone,test-reset-pin;
+		chipone,test-int-pin;
+		chipone,test-rawdata;
+		chipone,test-rawdata-frames      = <1>;
+		chipone,rawdata-min              = <1100>;
+		chipone,rawdata-max              = <3000>;
+		chipone,test-noise;
+		chipone,test-noise-frames        = <16>;
+		chipone,noise-max                = <125>;
+		chipone,test-open;
+		chipone,open-min                 = <1300>;
+		chipone,test-short;
+		chipone,short-min                = <1300>;
+		chipone,test-compensate-cap;
+		chipone,compensate-cap-min       = <1>;
+		chipone,compensate-cap-max       = <127>;
+
+		focaltech,reset-gpio = <&tlmm 86 0x01>;
+		focaltech,irq-gpio = <&tlmm 80 0x02>;
+		focaltech,max-touch-number = <10>;
+		focaltech,display-coords =  <0 0 720 1612>;
+	};
+
+};
+
+&soc {
+	gpio_boardid {
+		compatible = "gpio,boardid";
+		gpio,boardid0 = <&tlmm 69 0>;
+		gpio,boardid1 = <&tlmm 83 0>;
+		gpio,boardid2 = <&tlmm 68 0>;
+		gpio,boardid3 = <&tlmm 85 0>;
+		gpio,boardid4 = <&tlmm 93 0>;
+	};
+
+	vibrator {
+		compatible = "qcom,qpnp-vibrator-ldo";
+		vib,en-gpio = <&tlmm 17 0x0>;
+	};
+};
+
+&qupv3_se2_i2c {
+	status = "okay";
+	sm5109c@3e {
+	compatible = "smi,sm5109c";
+		status = "okay";
+		reg = <0x3e>;
+		enp_gpio = <&tlmm 65 0x0>;
+		enn_gpio = <&tlmm 26 0x0>;
+		poscntl_value = <0x14>;
+		negcntl_value = <0x14>;
+		on_delay = <5>;
+		off_delay = <5>;
+	};
+};
+
+&qupv3_se1_i2c {
+	nq@28 {
+		status = "disabled";
+	};
+};

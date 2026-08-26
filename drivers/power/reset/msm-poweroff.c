@@ -390,31 +390,6 @@ static size_t store_dload_mode(struct kobject *kobj, struct attribute *attr,
 }
 #endif /* CONFIG_QCOM_MINIDUMP */
 
-/* req SKO-1771,luohao,20240223,add,begin */
-/**
-*@brief: get efuse status from cmdline.
-*@Return: BOOLEAN efuse status.
-*        TRUE : fuse device.
-*        FALSE: non-fuse devices.
-*/
-#ifdef HMD_MP_VERSION
-static bool get_efuse_status(void)
-{
-	struct device_node *np;
-	const char *bootparams;
-
-	np = of_find_node_by_path("/chosen");
-	of_property_read_string(np, "bootargs", &bootparams);
-	if (!bootparams)
-		pr_err("%s: failed to get bootargs property\n", __func__);
-	else if (strnstr(bootparams, "ontimboot.efusestate=fuse",strlen(bootparams)))
-		return true;
-
-	return false;
-}
-#endif
-/* req SKO-1771,luohao,20240223,add,begin */
-
 void msm_set_restart_mode(int mode)
 {
 	restart_mode = mode;
@@ -434,34 +409,20 @@ static void msm_restart_prepare(const char *cmd)
 /*req SHK-335,luohao,20231120,add,begin*/
 #ifdef HMD_MP_VERSION
 #ifdef BUILD_USER_TYPE_VERSION
-	if (true == get_efuse_status()){
-		/*fuse device: mp_version user, disable diag and adb edl*/
-		if (cmd && !strncmp(cmd, "edl", 3)) {
-			pr_err("HDM: cmd = %s\n", cmd);
-			cmd = NULL;
-		}
-		if (cmd && !strcmp(cmd, "edl-adb")) {
-			pr_err("switch edl-adb to NULL");
-			cmd = NULL;
-		}
-	} else {
-		if (cmd && !strcmp(cmd, "edl-adb")) {
-			pr_err("switch edl-adb to NULL");
-			cmd = "edl";
-		}
+	/*mp_version user, disable diag and adb edl*/
+	if (cmd && !strncmp(cmd, "edl", 3)) {
+		pr_err("HDM: cmd = %s\n", cmd);
+		cmd = NULL;
+	}
+	if (cmd && !strcmp(cmd, "edl-adb")) {
+		pr_err("switch edl-adb to NULL");
+		cmd = "NULL";
 	}
 #else
-	if (true == get_efuse_status()){
-		/*fuse device: mp_version userdebug, disabel adb edl*/
-		if (cmd && !strcmp(cmd, "edl-adb")) {
-			pr_err("switch edl-adb to NULL");
-			cmd = NULL;
-		}
-	} else {
-		if (cmd && !strcmp(cmd, "edl-adb")) {
-			pr_err("switch edl-adb to NULL");
-			cmd = "edl";
-		}
+	/*mp_version userdebug, disabel adb edl*/
+	if (cmd && !strcmp(cmd, "edl-adb")) {
+		pr_err("switch edl-adb to NULL");
+		cmd = "NULL";
 	}
 #endif
 #else
@@ -473,11 +434,9 @@ static void msm_restart_prepare(const char *cmd)
 #endif
 
 #if (defined(HMD_MP_VERSION)) && (defined(BUILD_USER_TYPE_VERSION))
-	if (true == get_efuse_status()){
-		if (cmd && !strncmp(cmd, "recovery", 8)) {
-			pr_err("HDM: cmd = %s\n", cmd);
-			cmd = NULL;
-		}
+	if (cmd && !strncmp(cmd, "recovery", 8)) {
+		pr_err("HDM: cmd = %s\n", cmd);
+		cmd = NULL;
 	}
 #endif
 /*req SHK-335,luohao,20231120,add,end*/

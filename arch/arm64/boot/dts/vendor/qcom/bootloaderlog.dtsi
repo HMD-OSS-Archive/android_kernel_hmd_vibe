@@ -1,0 +1,17 @@
+&soc {
+        boot_log_drv {
+                compatible = "debug,bootlog";
+                linux,contiguous-region = <&bootlog_mem>;
+                second_log_offset = <0x40000>;
+                status = "okay";
+        };
+};
+
+&reserved_memory {
+                bootlog_mem: boot_log_region@0x70000000 {
+                        compatible = "removed-dma-pool";
+                        no-map;
+                        reg = <0x0 0x70000000 0x0 0x80000>;
+                };
+};
+

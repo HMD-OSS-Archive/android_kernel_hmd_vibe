@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# HMD Soc drivers
+#
+menu "HMD SoC drivers"
+
+config HMD_SWAPPINESS_OPT
+	tristate "swappiness optimization"
+	default m
+	help
+	  define this config to add swappiness optimization feature
+
+config HMD_BOOTMSG
+	tristate "Capature first 60s kernel log"
+	default m
+	help
+	  file node:/proc/bootmsg.
+
+config SUPPORT_CRASH_REASON
+	tristate "HMD ramdump mode display"
+	default m
+	help
+	  get crash reason
+
+config DEBUG_BOOTLOADER_LOG
+        tristate "support the CONFIG_DEBUG_BOOTLOADER_LOG to get the bootloader log with log tool"
+        default m
+        help
+          get the bootloader log with log tool
+          
+config DUMP_TASKS_MEM
+	tristate "dump task memory info"
+	default m
+	help
+	  define this config to add dump task meminfo feature
+
+endmenu
